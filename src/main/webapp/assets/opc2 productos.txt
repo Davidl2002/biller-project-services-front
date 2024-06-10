@@ -1,0 +1,114 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Productos</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Productos</h1>
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#agregarProductoModal">Agregar Producto</button>
+
+        <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-labelledby="agregarProductoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="agregarProductoForm" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" placeholder="Ingrese el nombre del producto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descProducto" class="form-label">Descripción del Producto</label>
+                                <input type="text" class="form-control" id="descProducto" name="descProducto" placeholder="Ingrese descripción del producto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stockProducto" class="form-label">Cantidad del Producto</label>
+                                <input type="number" class="form-control" id="stockProducto" name="stockProducto" placeholder="Ingrese la cantidad del producto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="imagenProducto" class="form-label">Imagen del Producto</label>
+                                <input type="file" class="form-control" id="imagenProducto" name="imagenProducto" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Nombre del Producto</th>
+                    <th>Descripción</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="productosTable">
+                <tr>
+                    <td><img src="./asserts/Fondo login.jpeg" alt="Producto" width="190"></td>
+                    <td>Ejemplo de Producto</td>
+                    <td>Descripción del Producto</td>
+                    <td>10</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editarProductoModal">Editar</button>
+                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminar(this)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProductoModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarProductoForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="editarNombreProducto" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="editarNombreProducto" name="nombreProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarDescProducto" class="form-label">Descripción del Producto</label>
+                            <input type="text" class="form-control" id="editarDescProducto" name="descProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarStockProducto" class="form-label">Cantidad del Producto</label>
+                            <input type="number" class="form-control" id="editarStockProducto" name="stockProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editarImagenProducto" class="form-label">Imagen del Producto</label>
+                            <input type="file" class="form-control" id="editarImagenProducto" name="imagenProducto">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script>
+        function confirmarEliminar(button) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                let row = button.closest('tr');
+                row.parentNode.removeChild(row);
+            }
+        }
+    </script>
+</body>
+</html>
