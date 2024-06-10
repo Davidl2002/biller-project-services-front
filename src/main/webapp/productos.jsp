@@ -144,7 +144,6 @@
         });
 
         function editarProducto(id) {
-            // Datos de ejemplo para el producto por defecto
             const producto = {
                 id: 0,
                 nombre: "Producto por Defecto",
@@ -152,13 +151,11 @@
                 cantidad: 10
             };
 
-            // Cargar los datos en el formulario de edición
             document.getElementById('editProductoId').value = producto.id;
             document.getElementById('editNombreProducto').value = producto.nombre;
             document.getElementById('editDescProducto').value = producto.descripcion;
             document.getElementById('editStockProducto').value = producto.cantidad;
             
-            // Mostrar el modal de edición
             const editarProductoModal = new bootstrap.Modal(document.getElementById('editarProductoModal'));
             editarProductoModal.show();
         }

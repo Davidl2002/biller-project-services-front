@@ -2,11 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     cargarProductos();
 });
 
-let productosFactura = []; // Lista de productos en la factura
-
+let productosFactura = []; 
 function cargarProductos() {
-    // Llamar a la API para obtener la lista de productos
-    // Simulación de productos por defecto
     const productos = [
         { id: 1, nombre: 'Producto 1' },
         { id: 2, nombre: 'Producto 2' },
@@ -26,19 +23,15 @@ document.getElementById('facturacionForm').addEventListener('submit', function(e
     event.preventDefault();
     const formData = new FormData(this);
     const productoId = formData.get('producto');
-    const cantidad = parseInt(formData.get('cantidad')); // Convertir a entero
+    const cantidad = parseInt(formData.get('cantidad')); 
 
-    // Verificar si el producto ya está en la lista de productos de la factura
     const productoExistente = productosFactura.find(producto => producto.id === productoId);
     if (productoExistente) {
-        // Actualizar la cantidad
         productoExistente.cantidad += cantidad;
     } else {
-        // Agregar el producto a la lista de productos de la factura
         productosFactura.push({ id: productoId, cantidad: cantidad });
     }
 
-    // Actualizar la lista de productos en la factura
     actualizarListaProductos(productosFactura);
 });
 
@@ -50,7 +43,6 @@ function actualizarListaProductos(productos) {
         li.classList.add('list-group-item');
         li.textContent = `${producto.nombre} - Cantidad: ${producto.cantidad}`;
         
-        // Agregar un botón para quitar cantidad
         const btnQuitarCantidad = document.createElement('button');
         btnQuitarCantidad.textContent = 'Quitar';
         btnQuitarCantidad.classList.add('btn', 'btn-sm', 'btn-danger', 'ms-2');
@@ -64,19 +56,14 @@ function actualizarListaProductos(productos) {
 }
 
 function quitarCantidad(productoId) {
-    // Buscar el producto en la lista de productos de la factura
     const index = productosFactura.findIndex(producto => producto.id === productoId);
     if (index !== -1) {
-        // Preguntar al usuario cuánta cantidad desea quitar
         const cantidadQuitar = parseInt(prompt('Ingrese la cantidad que desea quitar:', ''));
         if (!isNaN(cantidadQuitar)) {
-            // Restar la cantidad
             productosFactura[index].cantidad -= cantidadQuitar;
-            // Si la cantidad es menor o igual a cero, eliminar el producto de la lista
             if (productosFactura[index].cantidad <= 0) {
                 productosFactura.splice(index, 1);
             }
-            // Actualizar la lista de productos en la factura
             actualizarListaProductos(productosFactura);
         } else {
             alert('Ingrese una cantidad válida.');
@@ -87,21 +74,18 @@ function quitarCantidad(productoId) {
 }
 
 document.getElementById('generarFacturaBtn').addEventListener('click', function() {
-    // Llamar a la API para generar el PDF de la factura
     generarPDF();
 });
 
 function generarPDF() {
-    // Obtener los datos de la factura desde la API (si es necesario)
 
-    // Generar el contenido del PDF
     const docDefinition = {
         content: [
             'Factura',
-            // Aquí puedes agregar más contenido de la factura según tus necesidades
+            
         ]
     };
 
-    // Generar el PDF
+    
     pdfMake.createPdf(docDefinition).open();
 }
