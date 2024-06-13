@@ -1,3 +1,6 @@
+<%@page import="org.json.JSONObject"%>
+<%@page import="org.json.JSONArray"%>
+<%@page import="Controller.ProductsController"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!doctype html>
 <html lang="es">
@@ -81,48 +84,34 @@
         </div>
 
         <div class="row" id="productosContainer">
+            <%
+            ProductsController controller = new ProductsController();
+            JSONArray products = controller.getProducts();
+            
+            for (int i = 0; i < products.length(); i++) {
+                JSONObject product = products.getJSONObject(i);
+            %>
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
-                    <img src="./assets/Fondo prod.png" class="card-img-top" alt="Producto">
+                    <img src="https://drive.google.com/uc?export=view&id=1OUYas7HDUo2nB_vvDgq2jHZHBUaRjcCL" class="card-img-top" alt="Producto">
                     <div class="card-body">
-                        <h5 class="card-title">Producto por Defecto</h5>
-                        <p class="card-text">Descripción del Producto por Defecto</p>
-                        <p class="card-text"><small class="text-muted">Cantidad: 10</small></p>
+                        <h5 class="card-title"><%=product.getString("name")%> (<%=product.getString("code")%>)</h5>
+                        <p class="card-text"><%=product.getString("description")%></p>
+                        <p class="card-text"><small class="text-muted">Precio Unitario: $<%=product.getDouble("unitPrice")%></small></p>
+                        <p class="card-text"><small class="text-muted">Cantidad: <%=product.getInt("stock")%></small></p>
                         <button class="btn btn-warning" onclick="editarProducto(0)">Editar</button>
                         <button class="btn btn-danger" onclick="eliminarProducto(0)">Eliminar</button>
                     </div>
                 </div>
             </div>
+            <%
+            }
+            %>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/api/productos')
-                .then(response => response.json())
-                .then(data => {
-                    const productosContainer = document.getElementById('productosContainer');
-                    data.forEach(producto => {
-                        const productoCard = `
-                            <div class="col-md-4 mb-4">
-                                <div class="card shadow-sm">
-                                    <img src="${producto.imagen}" class="card-img-top" alt="${producto.nombre}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">${producto.nombre}</h5>
-                                        <p class="card-text">${producto.descripcion}</p>
-                                        <p class="card-text"><small class="text-muted">Cantidad: ${producto.cantidad}</small></p>
-                                        <button class="btn btn-warning" onclick="editarProducto(${producto.id})">Editar</button>
-                                        <button class="btn btn-danger" onclick="eliminarProducto(${producto.id})">Eliminar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        productosContainer.insertAdjacentHTML('beforeend', productoCard);
-                    });
-                })
-                .catch(error => console.error('Error al cargar los productos:', error));
-        });
 
         document.getElementById('agregarProductoForm').addEventListener('submit', function(event) {
             event.preventDefault();
