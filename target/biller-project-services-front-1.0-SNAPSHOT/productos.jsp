@@ -98,10 +98,7 @@
                                 <input type="hidden" id="editProductoId" name="id">
                                 <div class="mb-3">
                                     <label for="editCodigoProducto" class="form-label">Código del Producto</label>
-                                    <input type="text" class="form-control" id="editCodigoProducto" name="codigoProducto" required maxlength="6" pattern="[A-Za-z0-9]{6}" oninput="this.value = this.value.toUpperCase()">
-                                    <div class="invalid-feedback">
-                                        El código del producto debe tener exactamente 6 caracteres alfanuméricos.
-                                    </div>
+                                    <input type="text" class="form-control" id="editCodigoProducto" name="codigoProducto" readonly>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editNombreProducto" class="form-label">Nombre del Producto</label>
