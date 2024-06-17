@@ -211,6 +211,14 @@
                                                     categoryId: formData.get('categoriaProducto')
                                                 };
                                                 // Enviar los datos al backend
+                                                if (data.code === formData.get('codigoProducto')) {
+                                                                Swal.fire({
+                                                                    icon: 'error',
+                                                                    title: 'Error',
+                                                                    text: 'El código del producto ya existe. Por favor, elija otro código.',
+                                                                    confirmButtonText: 'Aceptar'
+                                                                });
+                                                            }
                                                 fetch('http://localhost:8080/products', {
                                                     method: 'POST',
                                                     headers: {
@@ -218,12 +226,14 @@
                                                     },
                                                     body: JSON.stringify(data)
                                                 })
+                                                
                                                         .then(response => {
                                                             if (!response.ok) {
                                                                 throw new Error('Error al añadir el producto');
                                                             }
                                                             return response.text();
                                                         })
+                                                        
                                                         .then(data => {
                                                             console.log('Respuesta del servidor:', data);
                                                             Swal.fire({
@@ -238,14 +248,10 @@
                                                         })
                                                         .catch(error => {
                                                             console.error('Error:', error);
-                                                            Swal.fire({
-                                                                icon: 'error',
-                                                                title: 'Error al añadir el producto',
-                                                                text: 'Hubo un error al añadir el producto, por favor intenta de nuevo.'
-                                                            });
                                                             //toastr.error('Hubo un error al añadir el producto');
                                                             // Manejar errores de la solicitud
                                                         });
+
                                             };
                                             // Leer el archivo como base64
                                             reader.readAsDataURL(imagenProducto);
