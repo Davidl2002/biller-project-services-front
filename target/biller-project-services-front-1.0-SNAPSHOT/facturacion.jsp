@@ -1,8 +1,10 @@
+<%@page import="Controller.IdTypesController"%>
 <%@page import="org.json.JSONObject"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="Controller.CategoriesController"%>
 <%@page import="Controller.ProductsController"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -44,9 +46,11 @@
         <%
             ProductsController productsController = new ProductsController();
             CategoriesController categoriesController = new CategoriesController();
+            IdTypesController idController = new IdTypesController();
 
             JSONArray categories = categoriesController.getCategories();
             JSONArray products = productsController.getProducts();
+            JSONArray ids = idController.getIdTypes();
         %>
         <div class="container mt-4">
             <h1 class="text-center mb-4">Facturación</h1>
@@ -113,13 +117,58 @@
                        <div id="subtotalSuma">
                            
                        </div>
-                        <button id="generarFacturaBtn" class="btn btn-success mt-3">Generar Factura</button>
-                    </div>
+                        <button id="generarFacturaBtn" class="btn btn-success mt-3" disabled>Facturar Pedido</button>
                     </div>
                 </div>
-
+            </div>
+        <div class="modal fade" id="datosClienteModal" tabindex="-1" aria-labelledby="datosClienteModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="datosClienteModalLabel">Datos del Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="datosClienteForm">
+                    <div class="mb-3">
+                        <label for="tipoId" class="form-label">Tipo de ID</label>
+                        <select class="form-select" id="tipoId" name="tipoId" required>
+                            <option value="">Seleccionar tipo de ID...</option>
+                            <% for (int i = 0; i < ids.length(); i++) {%>
+                            <option value="<%= ids.getJSONObject(i).getInt("typeId")%>"><%= ids.getJSONObject(i).getString("type")%></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dni" class="form-label">Identificación del Cliente</label>
+                        <input type="text" class="form-control" id="dni" name="dni" placeholder="Cédula de identidad o RUC" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombreCliente" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" placeholder="Ej: Juan" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="apellidoCliente" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" placeholder="Ej: López" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailCliente" class="form-label">Correo Electrónico</label>
+                        <input type="email" class="form-control" id="emailCliente" name="emailCliente" placeholder="Ej: cliente@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccionCliente" class="form-label">Dirección</label>
+                        <input type="text" class="form-control" id="direccionCliente" name="direccionCliente" placeholder="Ingrese la dirección del cliente" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="celularCliente" class="form-label">Celular</label>
+                        <input type="text" class="form-control" id="celularCliente" name="celularCliente" placeholder="Ej: 0997836278" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Generar Factura</button>
+                </form>
             </div>
         </div>
+    </div>
+</div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="./js/facturacion.js"></script>

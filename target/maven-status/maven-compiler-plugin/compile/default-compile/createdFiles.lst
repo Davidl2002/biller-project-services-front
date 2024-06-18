@@ -1,2 +1,3 @@
 Controller\CategoriesController.class
+Controller\IdTypesController.class
 Controller\ProductsController.class
