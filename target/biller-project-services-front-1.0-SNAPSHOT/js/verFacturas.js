@@ -61,7 +61,7 @@ function mostrarDetallesFactura(factura) {
                 <h5 class="card-title">Fecha: ${factura.dateBill}</h5>
                 <p class="card-text">Subtotal: ${factura.subtotal}</p>
                 <p class="card-text">Total: ${factura.total}</p>
-                ${factura.customer ? `
+                ${factura.customer && factura.customer.customerId !== 0 ? `
                     <p class="card-text">Cliente: ${factura.customer.firstName} ${factura.customer.lastName}</p>
                     <p class="card-text">DNI: ${factura.customer.customerDni}</p>
                     <p class="card-text">Email: ${factura.customer.email}</p>
@@ -106,7 +106,8 @@ function generarPDF() {
 
     // Encabezado de la factura
     doc.setFont('helvetica', 'bold');
-    doc.text('TIENDA EJEMPLO', marginLeft, y);
+    doc.text('TIENDA', marginLeft, y);
+    y += lineSpacing;
     y += lineSpacing;
     doc.text('Factura de Venta', marginLeft, y);
     y += lineSpacing;
@@ -115,13 +116,14 @@ function generarPDF() {
     y += lineSpacing;
     doc.text(`Fecha: ${facturaActual.dateBill}`, marginLeft, y);
     y += lineSpacing;
+    y += lineSpacing;
 
     // Información del cliente
     doc.setFont('helvetica', 'bold');
     doc.text('Datos del Cliente:', marginLeft, y);
     y += lineSpacing;
     doc.setFont('helvetica', 'normal');
-    if (facturaActual.customer) {
+    if (facturaActual.customer && facturaActual.customer.customerId !== 0) {
         doc.text(`Nombre: ${facturaActual.customer.firstName} ${facturaActual.customer.lastName}`, marginLeft, y);
         y += lineSpacing;
         doc.text(`DNI: ${facturaActual.customer.customerDni}`, marginLeft, y);
@@ -177,4 +179,3 @@ function generarPDF() {
     const pdfContainer = document.getElementById('facturaPDF');
     pdfContainer.innerHTML = `<iframe src="${pdfDataUri}" width="100%" height="500px"></iframe>`;
 }
-

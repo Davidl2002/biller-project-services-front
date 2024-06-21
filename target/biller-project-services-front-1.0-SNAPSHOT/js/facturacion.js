@@ -17,15 +17,46 @@ document.addEventListener('DOMContentLoaded', function() {
             const cantidad = parseInt(formData.get('cantidad'));
             const precio = parseFloat(formData.get('unitPrice'));
 
-            let productoExistente = productosFactura.find(producto => producto.id === productoId);
+            // Obtener el stock disponible del producto
+            const stockDisponible = parseInt(form.querySelector('.stock').value);
+
+            // Verificar la cantidad total ya agregada a la factura para este producto
+            const productoExistente = productosFactura.find(producto => producto.id === productoId);
+            const cantidadExistente = productoExistente ? productoExistente.cantidad : 0;
+            const cantidadTotal = cantidadExistente + cantidad;
+
+            // Validar que la cantidad total no supere el stock
+            if (cantidadTotal > stockDisponible) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cantidad excedida',
+                    text: `La cantidad total (${cantidadTotal}) supera el stock disponible (${stockDisponible}).`
+                });
+                return;
+            }
+
+            // Si la cantidad es válida, agregar o actualizar el producto en la factura
             if (productoExistente) {
-                productoExistente.cantidad += cantidad;
+                productoExistente.cantidad = cantidadTotal; // Actualizar la cantidad existente
             } else {
                 productosFactura.push({ id: productoId, nombre: productoNombre, cantidad: cantidad, precio: precio });
             }
 
             actualizarListaProductos(productosFactura);
             actualizarBotonFacturar();
+        });
+    });
+
+    // Manejador para bloquear/desbloquear campos según el tipo de ID seleccionado
+    document.getElementById('tipoId').addEventListener('change', function(event) {
+        const tipoId = event.target.value;
+        const esConsumidorFinal = tipoId === '3'; // Asume que '3' es el valor para "Consumidor Final"
+        const camposCliente = ['dni', 'nombreCliente', 'apellidoCliente', 'emailCliente', 'direccionCliente', 'celularCliente'];
+
+        camposCliente.forEach(campoId => {
+            const campo = document.getElementById(campoId);
+            campo.disabled = esConsumidorFinal;
+            campo.required = !esConsumidorFinal;
         });
     });
 });
@@ -97,10 +128,18 @@ function quitarCantidad(productoId) {
             actualizarListaProductos(productosFactura);
             actualizarBotonFacturar();
         } else {
-            alert('Ingrese una cantidad válida mayor a 0.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Cantidad inválida',
+                text: 'Ingrese una cantidad válida mayor a 0.'
+            });
         }
     } else {
-        alert('El producto no está en la lista de productos de la factura.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Producto no encontrado',
+            text: 'El producto no está en la lista de productos de la factura.'
+        });
     }
 }
 
@@ -129,6 +168,7 @@ function generarFactura() {
     }));
 
     const tipoId = parseInt(document.getElementById('tipoId').value);
+    let customerId = null;
     const dni = document.getElementById('dni').value;
     const nombre = document.getElementById('nombreCliente').value;
     const apellido = document.getElementById('apellidoCliente').value;
@@ -136,10 +176,14 @@ function generarFactura() {
     const direccion = document.getElementById('direccionCliente').value;
     const celular = document.getElementById('celularCliente').value;
 
-    const factura = {
-        total: totalIva,
-        subtotal: subtotal,
-        customer: {
+    let customerData = {};
+
+    if (tipoId === 3) { // Asume que '3' es el valor para "Consumidor Final"
+        customerData = {
+            customerId: 0 // ID para "Consumidor Final"
+        };
+    } else {
+        customerData = {
             idTypeId: tipoId,
             customerDni: dni,
             firstName: nombre,
@@ -147,7 +191,13 @@ function generarFactura() {
             email: email,
             address: direccion,
             phoneNumber: celular
-        },
+        };
+    }
+
+    const factura = {
+        total: totalIva,
+        subtotal: subtotal,
+        customer: customerData,
         detalles: detalles
     };
 
@@ -172,25 +222,20 @@ function enviarFacturaAPI(factura) {
             return response.json();
         })
         .then(data => {
-            alert('Factura creada exitosamente');
-            window.location.reload();
+            Swal.fire({
+                icon: 'success',
+                title: 'Factura creada',
+                text: 'Factura creada exitosamente',
+            }).then(() => {
+                window.location.reload();
+            });
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Hubo un error al crear la factura');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al crear la factura'
+            });
         });
 }
-
-
-//function generarPDF() {
-//
-//    const docDefinition = {
-//        content: [
-//            'Factura',
-//            
-//        ]
-//    };
-//
-//    
-//    pdfMake.createPdf(docDefinition).open();
-//}
