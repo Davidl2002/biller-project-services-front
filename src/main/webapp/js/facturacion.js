@@ -4,6 +4,7 @@ let totalIva = 0;
 
 const subtotalProElement = document.getElementById('subtotalPro');
 const subtotalSumaElement = document.getElementById('subtotalSuma');
+const generarFacturaBtn = document.getElementById('generarFacturaBtn');
 
 document.addEventListener('DOMContentLoaded', function() {
     const formsFacturacion = document.querySelectorAll('.facturacionForm');
@@ -22,8 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 productosFactura.push({ id: productoId, nombre: productoNombre, cantidad: cantidad, precio: precio });
             }
-            
+
             actualizarListaProductos(productosFactura);
+            actualizarBotonFacturar();
         });
     });
 });
@@ -64,7 +66,8 @@ function actualizarListaProductos(productos) {
         listaProductos.appendChild(productoDiv);
     });
 
-    totalIva = subtotal + (subtotal * 0.15);
+    totalIva = subtotal * 1.15; // Subtotal + 15% IVA
+    let ivaValor = subtotal * 0.15;
 
     subtotalProElement.innerHTML = ''; // Limpiar contenido anterior
     subtotalSumaElement.innerHTML = ''; // Limpiar contenido anterior
@@ -72,6 +75,10 @@ function actualizarListaProductos(productos) {
     const subtotalGeneral = document.createElement('h4');
     subtotalGeneral.textContent = `Subtotal: $${subtotal.toFixed(2)}`;
     subtotalProElement.appendChild(subtotalGeneral);
+
+    const iva = document.createElement('h4');
+    iva.textContent = `IVA (15%): $${ivaValor.toFixed(2)}`;
+    subtotalProElement.appendChild(iva);
 
     const totalGeneral = document.createElement('h4');
     totalGeneral.textContent = `Total: $${totalIva.toFixed(2)}`;
@@ -88,6 +95,7 @@ function quitarCantidad(productoId) {
                 productosFactura.splice(index, 1);
             }
             actualizarListaProductos(productosFactura);
+            actualizarBotonFacturar();
         } else {
             alert('Ingrese una cantidad válida mayor a 0.');
         }
@@ -96,8 +104,21 @@ function quitarCantidad(productoId) {
     }
 }
 
+function actualizarBotonFacturar() {
+    if (productosFactura.length > 0) {
+        generarFacturaBtn.disabled = false;
+    } else {
+        generarFacturaBtn.disabled = true;
+    }
+}
 
 document.getElementById('generarFacturaBtn').addEventListener('click', function() {
+    const modal = new bootstrap.Modal(document.getElementById('datosClienteModal'));
+    modal.show();
+});
+
+document.getElementById('datosClienteForm').addEventListener('submit', function(event) {
+    event.preventDefault();
     generarFactura();
 });
 
@@ -107,9 +128,26 @@ function generarFactura() {
         quantity: producto.cantidad
     }));
 
+    const tipoId = parseInt(document.getElementById('tipoId').value);
+    const dni = document.getElementById('dni').value;
+    const nombre = document.getElementById('nombreCliente').value;
+    const apellido = document.getElementById('apellidoCliente').value;
+    const email = document.getElementById('emailCliente').value;
+    const direccion = document.getElementById('direccionCliente').value;
+    const celular = document.getElementById('celularCliente').value;
+
     const factura = {
         total: totalIva,
         subtotal: subtotal,
+        customer: {
+            idTypeId: tipoId,
+            customerDni: dni,
+            firstName: nombre,
+            lastName: apellido,
+            email: email,
+            address: direccion,
+            phoneNumber: celular
+        },
         detalles: detalles
     };
 
@@ -117,12 +155,11 @@ function generarFactura() {
 }
 
 function enviarFacturaAPI(factura) {
-    const url = 'http://localhost:8080/api/bills'; // URL de tu API para crear la factura
+    const url = 'http://localhost:8080/api/bills';
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-            // Puedes agregar más headers si tu API los requiere
         },
         body: JSON.stringify(factura)
     };
@@ -136,7 +173,7 @@ function enviarFacturaAPI(factura) {
         })
         .then(data => {
             alert('Factura creada exitosamente');
-            // Aquí puedes manejar la respuesta de la API si necesitas hacer algo más
+            window.location.reload();
         })
         .catch(error => {
             console.error('Error:', error);
