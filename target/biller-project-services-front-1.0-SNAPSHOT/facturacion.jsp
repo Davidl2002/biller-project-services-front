@@ -4,7 +4,6 @@
 <%@page import="Controller.CategoriesController"%>
 <%@page import="Controller.ProductsController"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@include file="navBar.jsp" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -123,8 +122,6 @@
 
                         </div>
                         <button id="generarFacturaBtn" class="btn btn-success mt-3">Generar Factura</button>
-                    </div>
-                </div>
                        <div id="subtotalSuma">
                            
                        </div>
@@ -166,44 +163,11 @@
                         <label for="emailCliente" class="form-label">Correo Electrónico</label>
                         <input type="email" class="form-control" id="emailCliente" name="emailCliente" placeholder="Ej: cliente@example.com" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="direccionCliente" class="form-label">Dirección</label>
-                        <input type="text" class="form-control" id="direccionCliente" name="direccionCliente" placeholder="Ingrese la dirección del cliente" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="celularCliente" class="form-label">Celular</label>
-                        <input type="text" class="form-control" id="celularCliente" name="celularCliente" placeholder="Ej: 0997836278" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Generar Factura</button>
-                </form>
+                </div>
+
             </div>
-
         </div>
-    </div>
-</div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const buscarInput = document.getElementById('buscarProducto');
-
-            buscarInput.addEventListener('input', function () {
-                const valor = buscarInput.value.trim().toLowerCase();
-
-                const productos = document.querySelectorAll('.producto');
-
-                productos.forEach(producto => {
-                    const nombre = producto.getAttribute('data-product-name').toLowerCase();
-                    const codigo = producto.getAttribute('data-product-code').toLowerCase();
-
-                    if (nombre.includes(valor) || codigo.includes(valor)) {
-                        producto.style.display = 'block';
-                    } else {
-                        producto.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/facturacion.js"></script>
