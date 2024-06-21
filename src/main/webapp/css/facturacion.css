@@ -1,0 +1,188 @@
+body {
+    background-image: url('../assets/Fondo\ prod.png');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: #f5f5f5;
+}
+
+#buscarProducto {
+    width: 50%; 
+    max-width: 500px; 
+    margin: 0 auto; 
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 20px; 
+    box-sizing: border-box;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: inherit;
+    background-size: inherit;
+    background-position: inherit;
+    filter: blur(2px) brightness(0.7);
+    z-index: -1;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #cfcfcf;
+}
+
+.card-text {
+    font-size: 0.875rem;
+    color: #d1d1d1;
+}
+
+.btn {
+    border-radius: 20px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: #4a90e2;
+    border: none;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #357ABD;
+}
+
+.btn-warning {
+    background-color: #f5a623;
+    border: none;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #d48808;
+}
+
+.btn-danger {
+    background-color: #d0021b;
+    border: none;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #a00115;
+}
+
+.modal-content {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f5f5f5;
+    border-radius: 20px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+.modal-body {
+    padding-top: 0;
+}
+
+#facturaFija {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    color: #f5f5f5;
+    position: fixed;
+    top: 55px;
+    right: 50px;
+    width: 350px; 
+    height: calc(100vh - 55px); 
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+#listaProductos {
+    list-style-type: none;
+    padding: 0;
+    color: #d1d1d1;
+}
+
+.producto {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.producto strong, .producto span {
+    flex: 1;
+    color: #f5f5f5; /* Texto blanco */
+}
+
+.cantidad {
+    margin-left: 10px;
+    color: #f5f5f5; /* Texto blanco */
+}
+
+.btn-quitar {
+    margin-left: auto;
+    background-color: #d0021b;
+    border: none;
+    color: #fff;
+    border-radius: 20px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-quitar:hover {
+    background-color: #a00115;
+    transform: translateY(-2px);
+}
+
+#subtotalPro, #subtotalSuma {
+    margin-top: 20px;
+    font-size: 1.2rem;
+}
+
+#generarFacturaBtn:disabled {
+    background-color: #999;
+    border: none;
+}

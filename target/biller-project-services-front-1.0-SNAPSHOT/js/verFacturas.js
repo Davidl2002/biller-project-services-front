@@ -98,31 +98,83 @@ function generarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    doc.text(`Factura #${facturaActual.billId}`, 10, 10);
-    doc.text(`Fecha: ${facturaActual.dateBill}`, 10, 20);
-    doc.text(`Subtotal: $${facturaActual.subtotal}`, 10, 30);
-    doc.text(`Total: $${facturaActual.total}`, 10, 40);
+    // Configuración de estilos
+    doc.setFontSize(12);
+    const marginLeft = 10;
+    const lineSpacing = 7;
+    let y = 10;
 
+    // Encabezado de la factura
+    doc.setFont('helvetica', 'bold');
+    doc.text('TIENDA EJEMPLO', marginLeft, y);
+    y += lineSpacing;
+    doc.text('Factura de Venta', marginLeft, y);
+    y += lineSpacing;
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Factura #: ${facturaActual.billId}`, marginLeft, y);
+    y += lineSpacing;
+    doc.text(`Fecha: ${facturaActual.dateBill}`, marginLeft, y);
+    y += lineSpacing;
+
+    // Información del cliente
+    doc.setFont('helvetica', 'bold');
+    doc.text('Datos del Cliente:', marginLeft, y);
+    y += lineSpacing;
+    doc.setFont('helvetica', 'normal');
     if (facturaActual.customer) {
-        doc.text(`Cliente: ${facturaActual.customer.firstName} ${facturaActual.customer.lastName}`, 10, 50);
-        doc.text(`DNI: ${facturaActual.customer.customerDni}`, 10, 60);
-        doc.text(`Email: ${facturaActual.customer.email}`, 10, 70);
-        doc.text(`Dirección: ${facturaActual.customer.address}`, 10, 80);
-        doc.text(`Teléfono: ${facturaActual.customer.phoneNumber}`, 10, 90);
+        doc.text(`Nombre: ${facturaActual.customer.firstName} ${facturaActual.customer.lastName}`, marginLeft, y);
+        y += lineSpacing;
+        doc.text(`DNI: ${facturaActual.customer.customerDni}`, marginLeft, y);
+        y += lineSpacing;
+        doc.text(`Email: ${facturaActual.customer.email}`, marginLeft, y);
+        y += lineSpacing;
+        doc.text(`Dirección: ${facturaActual.customer.address}`, marginLeft, y);
+        y += lineSpacing;
+        doc.text(`Teléfono: ${facturaActual.customer.phoneNumber}`, marginLeft, y);
+        y += lineSpacing;
     } else {
-        doc.text('Cliente: Consumidor Final', 10, 50);
+        doc.text('Cliente: Consumidor Final', marginLeft, y);
+        y += lineSpacing;
     }
 
-    doc.text('Detalles de los productos:', 10, 100);
+    // Detalles de los productos
+    y += 10;
+    doc.setFont('helvetica', 'bold');
+    doc.text('Detalles de los Productos:', marginLeft, y);
+    y += lineSpacing;
+
+    // Cabecera de la tabla
+    doc.setFont('helvetica', 'bold');
+    doc.text('Producto', marginLeft, y);
+    doc.text('Precio', marginLeft + 70, y);
+    doc.text('Cantidad', marginLeft + 110, y);
+    doc.text('Total', marginLeft + 150, y);
+    y += lineSpacing;
+
+    doc.setFont('helvetica', 'normal');
     if (facturaActual.detalle && facturaActual.detalle.length > 0) {
-        facturaActual.detalle.forEach((detalle, index) => {
-            doc.text(`Producto: ${detalle.productName}, Precio: $${detalle.productUnitPrice}, Cantidad: ${detalle.quantity}`, 10, 110 + (index * 10));
+        facturaActual.detalle.forEach((detalle) => {
+            doc.text(detalle.productName, marginLeft, y);
+            doc.text(`$${detalle.productUnitPrice.toFixed(2)}`, marginLeft + 70, y);
+            doc.text(`${detalle.quantity}`, marginLeft + 110, y);
+            doc.text(`$${(detalle.productUnitPrice * detalle.quantity).toFixed(2)}`, marginLeft + 150, y);
+            y += lineSpacing;
         });
     } else {
-        doc.text('No hay productos en esta factura.', 10, 110);
+        doc.text('No hay productos en esta factura.', marginLeft, y);
+        y += lineSpacing;
     }
 
+    // Subtotal y Total
+    y += 10;
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Subtotal: $${facturaActual.subtotal.toFixed(2)}`, marginLeft, y);
+    y += lineSpacing;
+    doc.text(`Total: $${facturaActual.total.toFixed(2)}`, marginLeft, y);
+
+    // Generar PDF en base64
     const pdfDataUri = doc.output('datauristring');
     const pdfContainer = document.getElementById('facturaPDF');
     pdfContainer.innerHTML = `<iframe src="${pdfDataUri}" width="100%" height="500px"></iframe>`;
 }
+
