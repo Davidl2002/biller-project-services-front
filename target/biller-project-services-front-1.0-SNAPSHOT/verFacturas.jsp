@@ -2,16 +2,16 @@
 <%@include file="navBar.jsp" %>
 <html>
 <head>
-    <title>Buscar Factura por ID</title>
+    <title>Facturas</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="css/verFacturas.css" rel="stylesheet">
 </head>
 <body>
     <div class="container mt-4">
-        <h2>Buscar Factura por ID</h2>
+        <h2>Ventas Facturadas</h2>
         <form id="buscarFacturaForm">
             <div class="form-group">
-                <label for="inputFacturaId">ID de la Factura:</label>
+                <label for="inputFacturaId">Ingrese el número de la factura:</label>
                 <input type="number" class="form-control" id="inputFacturaId" required min="1">
             </div>
             <button type="submit" class="btn btn-primary">Buscar Factura</button>

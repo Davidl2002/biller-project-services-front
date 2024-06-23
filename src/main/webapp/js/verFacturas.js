@@ -49,35 +49,54 @@ function mostrarDetallesFactura(factura) {
     const facturaDetails = document.getElementById('facturaDetails');
 
     const detallesHTML = factura.detalle && factura.detalle.length > 0 
-        ? factura.detalle.map(detalle => `<li>Producto: ${detalle.productName}, Precio: $${detalle.productUnitPrice}, Cantidad: ${detalle.quantity}</li>`).join('')
+        ? factura.detalle.map(detalle => `<li>${detalle.productName}, Unidades: ${detalle.quantity}</li>`).join('')
         : '<li>No hay productos en esta factura.</li>';
 
     const facturaHTML = `
         <div class="card">
-            <div class="card-header">
-                Detalles de la Factura #${factura.billId}
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Fecha: ${factura.dateBill}</h5>
-                <p class="card-text">Subtotal: ${factura.subtotal}</p>
-                <p class="card-text">Total: ${factura.total}</p>
-                ${factura.customer && factura.customer.customerId !== 0 ? `
-                    <p class="card-text">Cliente: ${factura.customer.firstName} ${factura.customer.lastName}</p>
-                    <p class="card-text">DNI: ${factura.customer.customerDni}</p>
-                    <p class="card-text">Email: ${factura.customer.email}</p>
-                    <p class="card-text">Dirección: ${factura.customer.address}</p>
-                    <p class="card-text">Teléfono: ${factura.customer.phoneNumber}</p>
-                ` : '<p class="card-text">Cliente: Consumidor Final</p>'}
-                <h5>Detalles de los productos:</h5>
-                <ul>
-                    ${detallesHTML}
-                </ul>
-            </div>
-        </div>
+    <div class="card-header">
+        Detalles de la Factura #${factura.number}
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Fecha: ${formatoFecha(factura.dateBill)}</h5>
+        <h5>Cliente Facturado:</h5>
+        ${factura.customer && factura.customer.customerId !== 0 ? `
+                ${factura.customer.idType.typeId === 1 ? `
+                    <p class="card-text">C. I: ${factura.customer.customerDni}</p>
+                ` : `
+                    <p class="card-text">RUC: ${factura.customer.customerDni}</p>
+                `}
+                <p class="card-text">Cliente: ${factura.customer.firstName} ${factura.customer.lastName}</p>
+        ` : '<p class="card-text">Consumidor Final</p>'}
+        <h5>Productos:</h5>
+        <ul>
+            ${detallesHTML}
+        </ul>
+        <p class="card-text">Total: $${factura.total.toFixed(2)}</p>
+    </div>
+</div>
+
     `;
 
     facturaDetails.innerHTML = facturaHTML;
 }
+
+    function formatoFecha(fecha) {
+        // Obtener objetos de fecha
+        const dateObj = new Date(fecha);
+        
+        // Obtener componentes de fecha y hora
+        const day = dateObj.getDate().toString().padStart(2, '0');
+        const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Los meses van de 0 a 11 en JavaScript
+        const year = dateObj.getFullYear();
+        const hours = dateObj.getHours().toString().padStart(2, '0');
+        const minutes = dateObj.getMinutes().toString().padStart(2, '0');
+        
+        // Formatear la fecha como dd/mm/yyyy hh:mm
+        const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+        
+        return formattedDate;
+    }
 
 function mostrarModalFactura() {
     generarPDF();
@@ -106,27 +125,32 @@ function generarPDF() {
 
     // Encabezado de la factura
     doc.setFont('helvetica', 'bold');
-    doc.text('TIENDA', marginLeft, y);
-    y += lineSpacing;
-    y += lineSpacing;
-    doc.text('Factura de Venta', marginLeft, y);
+    let textWidth = doc.getTextDimensions('MINIMARKET FOUR').w;
+    let centerX = (doc.internal.pageSize.getWidth() - textWidth) / 2;
+    doc.text('MINIMARKET FOUR', centerX, y);
     y += lineSpacing;
     doc.setFont('helvetica', 'normal');
-    doc.text(`Factura #: ${facturaActual.billId}`, marginLeft, y);
+    textWidth = doc.getTextDimensions('Dirección: Av. los chásquis, Télefono: 0987730252').w;
+    centerX = (doc.internal.pageSize.getWidth() - textWidth) / 2;
+    doc.text('Dirección: Av. los chásquis, Télefono: 0987730252', centerX, y);
     y += lineSpacing;
-    doc.text(`Fecha: ${facturaActual.dateBill}`, marginLeft, y);
+    y += lineSpacing;
+    doc.setFont('helvetica', 'normal');
+    doc.text(`NÚMERO DE FACTURA: ${facturaActual.number}`, marginLeft, y);
+    y += lineSpacing;
+    doc.text(`FECHA: ${formatDate(facturaActual.dateBill)}`, marginLeft, y);
     y += lineSpacing;
     y += lineSpacing;
 
     // Información del cliente
-    doc.setFont('helvetica', 'bold');
-    doc.text('Datos del Cliente:', marginLeft, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text('FACTURADO A', marginLeft, y);
     y += lineSpacing;
     doc.setFont('helvetica', 'normal');
     if (facturaActual.customer && facturaActual.customer.customerId !== 0) {
-        doc.text(`Nombre: ${facturaActual.customer.firstName} ${facturaActual.customer.lastName}`, marginLeft, y);
+        doc.text(`Nombre del Cliente: ${facturaActual.customer.firstName} ${facturaActual.customer.lastName}`, marginLeft, y);
         y += lineSpacing;
-        doc.text(`DNI: ${facturaActual.customer.customerDni}`, marginLeft, y);
+        doc.text(`C. I/RUC: ${facturaActual.customer.customerDni}`, marginLeft, y);
         y += lineSpacing;
         doc.text(`Email: ${facturaActual.customer.email}`, marginLeft, y);
         y += lineSpacing;
@@ -135,22 +159,22 @@ function generarPDF() {
         doc.text(`Teléfono: ${facturaActual.customer.phoneNumber}`, marginLeft, y);
         y += lineSpacing;
     } else {
-        doc.text('Cliente: Consumidor Final', marginLeft, y);
+        doc.text('Consumidor Final', marginLeft, y);
         y += lineSpacing;
     }
 
     // Detalles de los productos
     y += 10;
-    doc.setFont('helvetica', 'bold');
-    doc.text('Detalles de los Productos:', marginLeft, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text('DETALLES', marginLeft, y);
     y += lineSpacing;
 
     // Cabecera de la tabla
     doc.setFont('helvetica', 'bold');
     doc.text('Producto', marginLeft, y);
-    doc.text('Precio', marginLeft + 70, y);
+    doc.text('P. Unitario', marginLeft + 70, y);
     doc.text('Cantidad', marginLeft + 110, y);
-    doc.text('Total', marginLeft + 150, y);
+    doc.text('Subtotal', marginLeft + 150, y);
     y += lineSpacing;
 
     doc.setFont('helvetica', 'normal');
@@ -169,13 +193,23 @@ function generarPDF() {
 
     // Subtotal y Total
     y += 10;
-    doc.setFont('helvetica', 'bold');
-    doc.text(`Subtotal: $${facturaActual.subtotal.toFixed(2)}`, marginLeft, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Subtotal: $${facturaActual.subtotal.toFixed(2)}`, marginLeft + 150, y);
     y += lineSpacing;
-    doc.text(`Total: $${facturaActual.total.toFixed(2)}`, marginLeft, y);
+    doc.text(`IVA: $${(facturaActual.subtotal * 0.15).toFixed(2)}`, marginLeft + 150, y);
+    y += lineSpacing;
+    doc.text(`Total: $${facturaActual.total.toFixed(2)}`, marginLeft + 150, y);
 
     // Generar PDF en base64
     const pdfDataUri = doc.output('datauristring');
     const pdfContainer = document.getElementById('facturaPDF');
     pdfContainer.innerHTML = `<iframe src="${pdfDataUri}" width="100%" height="500px"></iframe>`;
+}
+
+function formatDate(fecha) {
+    const date = new Date(fecha);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }
