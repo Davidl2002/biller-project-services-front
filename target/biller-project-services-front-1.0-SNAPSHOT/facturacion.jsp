@@ -4,7 +4,7 @@
 <%@page import="Controller.CategoriesController"%>
 <%@page import="Controller.ProductsController"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@include file="navBar.jsp" %>
+<%@include file="navBarAd.jsp" %>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -17,31 +17,29 @@
     <link href="css/facturacion.css" rel="stylesheet">
     
     <style>
-        /* Estilos para la lista de productos */
         #listaProductos {
             list-style-type: none;
             padding: 0;
         }
 
-        /* Estilos para cada elemento de producto */
         .producto {
-            display: flex; /* Utilizamos flexbox para alinear los elementos */
-            align-items: center; /* Centrar verticalmente los elementos */
-            margin-bottom: 10px; /* Espacio entre cada elemento */
-            padding: 10px; /* Espaciado interno */
-            border: 1px solid #ccc; /* Borde para separar visualmente los elementos */
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 10px; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
         }
 
         .producto strong {
-            flex: 1; /* El nombre del producto ocupa el espacio restante */
+            flex: 1; 
         }
 
         .cantidad {
-            margin-left: 10px; /* Margen a la izquierda para separar el nombre de la cantidad */
+            margin-left: 10px;
         }
 
         .btn-quitar {
-            margin-left: auto; /* Mueve el botón "Quitar" al extremo derecho */
+            margin-left: auto; 
         }
     </style>
 </head>
@@ -177,11 +175,9 @@
     </div>
 </div>
 </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/facturacion.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -205,5 +201,6 @@
             });
         });
     </script>
+
 </body>
 </html>

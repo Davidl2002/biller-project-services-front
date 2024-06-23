@@ -151,7 +151,8 @@ function actualizarBotonFacturar() {
     }
 }
 
-document.getElementById('generarFacturaBtn').addEventListener('click', function() {
+document.getElementById('generarFacturaBtn').addEventListener('click', function(event) {
+    event.preventDefault(); // Evita que el formulario se envíe automáticamente
     const modal = new bootstrap.Modal(document.getElementById('datosClienteModal'));
     modal.show();
 });
@@ -225,7 +226,7 @@ function enviarFacturaAPI(factura) {
             Swal.fire({
                 icon: 'success',
                 title: 'Factura creada',
-                text: 'Factura creada exitosamente',
+                text: 'Factura creada exitosamente'
             }).then(() => {
                 window.location.reload();
             });

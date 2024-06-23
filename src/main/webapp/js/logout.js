@@ -6,7 +6,7 @@ function logout() {
         return;
     }
 
-    fetch("http://localhost:8085/auth/logout", {
+    fetch("http://localhost:8080/auth/logout", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

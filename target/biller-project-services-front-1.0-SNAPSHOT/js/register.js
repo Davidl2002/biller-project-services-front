@@ -6,7 +6,7 @@ async function register() {
     const email = document.getElementById("email").value;
 
     try {
-        const response = await fetch("http://localhost:8085/auth/register", {
+        const response = await fetch("http://localhost:8080/auth/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
