@@ -162,36 +162,97 @@ document.getElementById('datosClienteForm').addEventListener('submit', function(
     generarFactura();
 });
 
+function validarCedula(cedula) {
+   
+    if (cedula.length !== 10) {
+        return false;
+    }
+    
+    if (!(/^\d+$/.test(cedula))) {
+        return false;
+    }
+
+    let digitos = cedula.split('').map(digito => parseInt(digito));
+
+    let verificador = digitos.pop();
+    let suma = 0;
+
+    for (let i = 0; i < digitos.length; i++) {
+        let digito = digitos[i];
+        if (i % 2 === 0) {
+            digito *= 2;
+            if (digito > 9) {
+                digito -= 9;
+            }
+        }
+        suma += digito;
+    }
+
+    let residuo = suma % 10;
+    let resultado = residuo === 0 ? 0 : 10 - residuo;
+
+    return resultado === verificador;
+}
+
 function generarFactura() {
+    const tipoId = parseInt(document.getElementById('tipoId').value);
+    const dni = document.getElementById('dni').value.trim();
+
+    let esValidoCliente = false;
+
+    if (tipoId === 1) { 
+        esValidoCliente = validarCedula(dni);
+    } else if (tipoId === 2) { 
+        if (dni.length !== 13 || !(/^\d+$/.test(dni))) {
+            Swal.fire({
+                icon: 'error',
+                title: 'RUC inválido',
+                text: 'El RUC debe tener exactamente 13 dígitos numéricos.'
+            });
+            return;
+        }
+        esValidoCliente = true;
+    } else {
+        esValidoCliente = true;
+    }
+
+    if (!esValidoCliente) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Documento inválido',
+            text: 'Ingrese un número de cédula o RUC válido.'
+        });
+        return;
+    }
+
+    if (productosFactura.length === 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Factura vacía',
+            text: 'Agregue al menos un producto a la factura.'
+        });
+        return;
+    }
+
     const detalles = productosFactura.map(producto => ({
         product: parseInt(producto.id),
         quantity: producto.cantidad
     }));
 
-    const tipoId = parseInt(document.getElementById('tipoId').value);
-    let customerId = null;
-    const dni = document.getElementById('dni').value;
-    const nombre = document.getElementById('nombreCliente').value;
-    const apellido = document.getElementById('apellidoCliente').value;
-    const email = document.getElementById('emailCliente').value;
-    const direccion = document.getElementById('direccionCliente').value;
-    const celular = document.getElementById('celularCliente').value;
-
     let customerData = {};
-
-    if (tipoId === 3) { // Asume que '3' es el valor para "Consumidor Final"
+    if (tipoId === 3) { 
         customerData = {
-            customerId: 0 // ID para "Consumidor Final"
+            customerId: 0
         };
     } else {
         customerData = {
             idTypeId: tipoId,
             customerDni: dni,
-            firstName: nombre,
-            lastName: apellido,
-            email: email,
-            address: direccion,
-            phoneNumber: celular
+            firstName: document.getElementById('nombreCliente').value,
+            lastName: document.getElementById('apellidoCliente').value,
+            email: document.getElementById('emailCliente').value,
+            address: document.getElementById('direccionCliente').value,
+            phoneNumber: document.getElementById('celularCliente').value
         };
     }
 
@@ -204,6 +265,8 @@ function generarFactura() {
 
     enviarFacturaAPI(factura);
 }
+
+
 
 function enviarFacturaAPI(factura) {
     const url = 'http://localhost:8080/api/bills';

@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function () {
     btnMostrarFactura.addEventListener('click', function () {
         mostrarModalFactura();
     });
+    
+        btnVerTodo.addEventListener('click', function () {
+        mostrarTodasFacturas();
+    });
 
     // Agregar evento click al botón Generar PDF
     const btnGenerarPDF = document.getElementById('btnGenerarPDF');
@@ -19,6 +23,74 @@ document.addEventListener('DOMContentLoaded', function () {
         generarPDF();
     });
 });
+
+function mostrarTodasFacturas() {
+    fetch('http://localhost:8080/api/bills')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener las facturas');
+            }
+            return response.json();
+        })
+        .then(data => {
+            mostrarModalTodasFacturas(data); // Mostrar todas las facturas en el modal
+        })
+        .catch(error => {
+            console.error('Error al obtener las facturas:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al obtener las facturas',
+                text: 'No se pudieron obtener las facturas. Inténtalo de nuevo más tarde.'
+            });
+        });
+}
+
+function mostrarModalTodasFacturas(facturas) {
+    const modalTodasFacturas = new bootstrap.Modal(document.getElementById('modalTodasFacturas'));
+    const todasFacturasContainer = document.getElementById('todasFacturasContainer');
+
+    let html = '<ul class="list-group">';
+    facturas.forEach(factura => {
+        const cliente = factura.customer
+            ? `${factura.billId} <span style="margin-left: 10px;">${factura.customer.firstName || 'Consumidor'} ${factura.customer.lastName || 'Final'}</span>`
+            : `${factura.billId} Consumidor Final`;
+        
+        html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${cliente}
+                    <button class="btn btn-primary" onclick="verPDF(${factura.billId})">Ver PDF</button>
+                </li>`;
+    });
+    html += '</ul>';
+
+    todasFacturasContainer.innerHTML = html;
+    modalTodasFacturas.show();
+}
+
+
+
+function verPDF(facturaId) {
+    fetch(`http://localhost:8080/api/bills/${facturaId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Factura no encontrada');
+            }
+            return response.json();
+        })
+        .then(data => {
+            mostrarDetallesFactura(data);
+            facturaActual = data;
+            mostrarModalFactura(); // Mostrar el modal con la factura seleccionada
+        })
+        .catch(error => {
+            console.error('Error al buscar la factura:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al buscar la factura',
+                text: 'No se encontró la factura especificada. Verifica el ID e intenta de nuevo.'
+            });
+        });
+}
+
 
 let facturaActual = null;
 

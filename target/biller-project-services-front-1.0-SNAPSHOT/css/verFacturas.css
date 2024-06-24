@@ -121,3 +121,59 @@ h1, .card-header {
 .swal2-content {
     color: #d1d1d1;
 }
+
+/* Estilos para el fondo y el color del texto */
+.modal-content {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f5f5f5;
+}
+
+/* Estilos para los bordes redondeados y otros estilos específicos */
+.modal-content {
+    border-radius: 20px;
+}
+
+.modal-header {
+    border-bottom: none; /* Opcional: quitar el borde inferior del encabezado */
+}
+
+.modal-title {
+    font-size: 1.5rem;
+}
+
+#modalTodasFacturas .modal-content {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f5f5f5;
+    border-radius: 20px;
+}
+
+#modalTodasFacturas .modal-header {
+    border-bottom: none;
+}
+
+#modalTodasFacturas .modal-title {
+    font-size: 1.5rem;
+}
+
+#modalTodasFacturas .list-group-item {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #f5f5f5;
+    border: none;
+}
+
+#modalTodasFacturas .list-group-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#modalTodasFacturas .list-group-item .btn {
+    border-radius: 20px;
+}
+
+#modalTodasFacturas .list-group-item .btn-primary {
+    background-color: #4a90e2;
+    border: none;
+}
+
+#modalTodasFacturas .list-group-item .btn-primary:hover {
+    background-color: #357ABD;
+}
