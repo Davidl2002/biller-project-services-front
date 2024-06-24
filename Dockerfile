@@ -5,4 +5,4 @@ COPY target/biller-project-services-front-1.0-SNAPSHOT.war /usr/Local/tomcat/web
 
 EXPOSE 8080
 
-CMD ["catalina.sh", run]
+CMD ["catalina.sh", "run"]
