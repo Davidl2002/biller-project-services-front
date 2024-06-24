@@ -14,8 +14,8 @@ import org.json.JSONObject;
 
 public class ProductsController {
     private final HttpClient httpClient;
-    private static String url = "http://localhost:8080/products";
-    //private static String url = "https://biller-project-services.onrender.com/products";
+    //private static String url = "http://localhost:8080/products";
+    private static String url = "https://biller-project-services.onrender.com/products";
 
     public ProductsController() {
         this.httpClient = HttpClient.newHttpClient();

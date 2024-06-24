@@ -220,7 +220,7 @@
                                                                     confirmButtonText: 'Aceptar'
                                                                 });
                                                             }
-                                                fetch('http://localhost:8080/products', {
+                                                fetch('https://biller-project-services.onrender.com/products', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json'
@@ -266,7 +266,7 @@
                                         function editarProducto(id) {
                                             // Obtener los datos del producto desde el servidor
                                             console.log('id: ' + id)
-                                            fetch('http://localhost:8080/products/' + id)
+                                            fetch('https://biller-project-services.onrender.com/products/' + id)
 
                                                     .then(response => response.json())
                                                     .then(data => {
@@ -331,7 +331,7 @@
                                         function enviarDatosAlBackend(id, data) {
                                             console.log('Datos enviados al backend:', data);
                                             // Enviar los datos al backend
-                                            fetch('http://localhost:8080/products/' + id, {
+                                            fetch('https://biller-project-services.onrender.com/products/' + id, {
                                                 method: 'PATCH',
                                                 headers: {
                                                     'Content-Type': 'application/json'
@@ -387,7 +387,7 @@
                                                 cancelButtonText: 'Cancelar'
                                             }).then((result) => {
                                                 if (result.isConfirmed) {
-                                                    fetch('http://localhost:8080/products/' + id, {
+                                                    fetch('https://biller-project-services.onrender.com/products/' + id, {
                                                         method: 'DELETE'
                                                     })
                                                             .then(response => response.text())

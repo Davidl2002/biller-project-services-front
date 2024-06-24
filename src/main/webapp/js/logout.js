@@ -6,7 +6,7 @@ function logout() {
         return;
     }
 
-    fetch("http://localhost:8080/auth/logout", {
+    fetch("https://biller-project-services.onrender.com/auth/logout", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

@@ -9,8 +9,8 @@ import org.json.JSONArray;
 
 public class IdTypesController {
     private final HttpClient httpClient;
-    private static String url = "http://localhost:8080/api/idtypes";
-    //private static String url = "https://biller-project-services.onrender.com/products";
+    //private static String url = "http://localhost:8080/api/idtypes";
+    private static String url = "https://biller-project-services.onrender.com/api/idtypes";
 
     public IdTypesController() {
         this.httpClient = HttpClient.newHttpClient();

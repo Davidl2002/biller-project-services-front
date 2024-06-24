@@ -13,7 +13,7 @@
                     <a class="nav-link" href="facturacionAd.jsp">Facturar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="verFacturas.jsp">Ventas Facturadas</a>
+                    <a class="nav-link" href="verFacturasAd.jsp">Ventas Facturadas</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="logout()">Cerrar sesión</button>

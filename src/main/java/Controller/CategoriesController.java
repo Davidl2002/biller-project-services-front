@@ -9,8 +9,8 @@ import org.json.JSONArray;
 
 public class CategoriesController {
     private final HttpClient httpClient;
-    private static String url = "http://localhost:8080/categories";
-    //private static String url = "https://biller-project-services.onrender.com/products";
+    //private static String url = "http://localhost:8080/categories";
+    private static String url = "https://biller-project-services.onrender.com/categories";
 
     public CategoriesController() {
         this.httpClient = HttpClient.newHttpClient();

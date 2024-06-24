@@ -269,7 +269,8 @@ function generarFactura() {
 
 
 function enviarFacturaAPI(factura) {
-    const url = 'http://localhost:8080/api/bills';
+    //const url = 'http://localhost:8080/api/bills';
+    const url = 'https://biller-project-services.onrender.com/api/bills';
     const options = {
         method: 'POST',
         headers: {

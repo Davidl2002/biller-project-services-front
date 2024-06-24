@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function mostrarTodasFacturas() {
-    fetch('http://localhost:8080/api/bills')
+    fetch('https://biller-project-services.onrender.com/api/bills')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener las facturas');

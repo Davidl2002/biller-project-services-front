@@ -7,10 +7,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="facturacion.jsp">Facturar</a>
+                    <a class="nav-link" href="facturacionVn.jsp">Facturar</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="verFacturas.jsp">Ventas Facturadas</a>
+                    <a class="nav-link" href="verFacturasVn.jsp">Ventas Facturadas</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="logout()">Cerrar sesión</button>

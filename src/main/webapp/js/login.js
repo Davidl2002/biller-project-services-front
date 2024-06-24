@@ -3,7 +3,7 @@ async function login() {
     const password = document.getElementById("password").value;
 
     try {
-        const response = await fetch("http://localhost:8080/auth/login", {
+        const response = await fetch("https://biller-project-services.onrender.com/auth/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -35,7 +35,7 @@ async function login() {
                     // Redirigir según el rol del usuario
                     switch (role) {
                         case "Vendedor":
-                            window.location.href = "facturacion.jsp"; // Redirigir a la página del vendedor
+                            window.location.href = "facturacionVn.jsp"; // Redirigir a la página del vendedor
                             break;
                         case "Administrador":
                             window.location.href = "productos.jsp"; // Redirigir a la página del administrador
